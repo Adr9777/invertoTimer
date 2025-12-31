@@ -35,7 +35,6 @@ final class TimerInstance {
     private final ZoneId zoneId;
 
     private final List<ScheduledTask> actionTasks = new ArrayList<>();
-
     private final Map<String, ShowcaseSlot> showcaseSlots = new HashMap<>();
 
     private Instant expireAt = Instant.EPOCH;
@@ -48,6 +47,7 @@ final class TimerInstance {
     private volatile Instant lastNow;
 
     private BossbarShowcase bossbarShowcase;
+    private ShowcaseSlot bossbarSlot;
     private ShowcaseConfig bossBarConfig;
 
     private RuntimeContext ctx;
@@ -101,6 +101,7 @@ final class TimerInstance {
 
         showcaseSlots.clear();
         bossbarShowcase = null;
+        bossbarSlot = null;
         bossBarConfig = null;
 
         expireAt = Instant.EPOCH;
@@ -128,7 +129,10 @@ final class TimerInstance {
             if (kind == null) continue;
 
             Showcase showcase = ShowcaseFactory.create(
-                    key, sc, ctx,
+                    key,
+                    sc,
+                    ctx,
+                    () -> textFor(sc, lastNow == null ? Instant.now() : lastNow),
                     () -> progressFor(sc, lastNow == null ? Instant.now() : lastNow)
             );
             if (showcase == null) continue;
@@ -138,6 +142,7 @@ final class TimerInstance {
 
             if (showcase instanceof BossbarShowcase bbs) {
                 bossbarShowcase = bbs;
+                bossbarSlot = slot;
                 bossBarConfig = sc;
             }
         }
@@ -189,7 +194,6 @@ final class TimerInstance {
 
         ScheduledTask task = proxy.getScheduler()
                 .buildTask(plugin, () -> {
-                    // ensure placeholders use near-real execution time
                     lastNow = Instant.now();
                     try {
                         action.execute();
@@ -201,6 +205,19 @@ final class TimerInstance {
                 .schedule();
 
         actionTasks.add(task);
+    }
+
+    private Object textFor(final ShowcaseConfig sc, final Instant now) {
+        if (nextTarget == null) return sc.text();
+
+        ShowcaseConfig.After af = sc.after();
+        if (af == null || af.duration() == null || af.duration().isZero() || af.text() == null) return sc.text();
+
+        Instant target = nextTarget.toInstant();
+        Instant end = target.plus(af.duration());
+
+        if (!now.isBefore(target) && !now.isAfter(end)) return af.text();
+        return sc.text();
     }
 
     private float progressFor(final ShowcaseConfig sc, final Instant now) {
@@ -257,7 +274,7 @@ final class TimerInstance {
         final long nowMs = now.toEpochMilli();
 
         for (ShowcaseSlot slot : showcaseSlots.values()) {
-            if (!shouldShow(slot.config(), now)) continue;
+            if (!shouldShow(slot, now)) continue;
 
             Duration interval = slot.config().interval();
             if (interval == null) interval = slot.kind().defaultInterval();
@@ -285,16 +302,51 @@ final class TimerInstance {
     }
 
     private Instant getExpireTime() {
-        return expireAt.plusSeconds(2);
+        Instant last = expireAt;
+
+        if (nextTarget != null) {
+            final Instant target = nextTarget.toInstant();
+
+            for (ShowcaseSlot slot : showcaseSlots.values()) {
+                boolean allowAfter = switch (slot.kind()) {
+                    case ACTIONBAR, BOSSBAR, TITLE -> true;
+                    default -> false;
+                };
+                if (!allowAfter) continue;
+
+                ShowcaseConfig.After af = slot.config().after();
+                if (af == null || af.duration() == null || af.duration().isZero()) continue;
+
+                Instant end = target.plus(af.duration());
+                if (end.isAfter(last)) last = end;
+            }
+        }
+
+        return last.plusSeconds(2);
     }
 
-    private boolean shouldShow(final ShowcaseConfig sc, final Instant now) {
+    private boolean shouldShow(final ShowcaseSlot slot, final Instant now) {
         if (nextTarget == null) return false;
-        if (sc.startAt() == null) return true;
 
+        final ShowcaseConfig sc = slot.config();
         final Instant target = nextTarget.toInstant();
-        final Instant begin = target.minus(sc.startAt().abs());
-        return !now.isBefore(begin);
+
+        final Instant begin = (sc.startAt() == null) ? Instant.EPOCH : target.minus(sc.startAt().abs());
+
+        Instant end = target;
+
+        boolean allowAfter = switch (slot.kind()) {
+            case ACTIONBAR, BOSSBAR, TITLE -> true;
+            default -> false;
+        };
+
+        final ShowcaseConfig.After af = sc.after();
+        if (allowAfter && af != null && af.duration() != null && !af.duration().isZero()) {
+            end = target.plus(af.duration());
+        }
+
+        if (now.isBefore(begin)) return false;
+        return !now.isAfter(end);
     }
 
     String peekNext() {
@@ -302,11 +354,13 @@ final class TimerInstance {
     }
 
     void refreshFor(final Player p) {
-        if (bossbarShowcase == null || bossBarConfig == null) return;
+        if (bossbarShowcase == null || bossbarSlot == null) return;
+
         final Instant now = lastNow == null ? Instant.now() : lastNow;
 
         if (nextTarget == null) return;
-        if (!shouldShow(bossBarConfig, now)) {
+
+        if (!shouldShow(bossbarSlot, now)) {
             bossbarShowcase.hideFrom(p);
             return;
         }
@@ -330,7 +384,8 @@ final class TimerInstance {
             for (Player p : proxy.getAllPlayers()) {
                 try {
                     bossbarShowcase.hideFrom(p);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
     }

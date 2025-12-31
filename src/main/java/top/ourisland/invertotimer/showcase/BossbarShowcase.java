@@ -11,21 +11,21 @@ import java.util.function.Supplier;
 
 public class BossbarShowcase implements Showcase {
     private final RuntimeContext ctx;
-    private final String text;
+    private final Supplier<Object> textSupplier;
     private final BossBar bossBar;
     private final Supplier<Float> progressSupplier;
 
     public BossbarShowcase(
             RuntimeContext ctx,
-            String text,
-            String colorRaw,
-            Supplier<Float> progressSupplier
+            Supplier<Object> textSupplier,
+            Supplier<Float> progressSupplier,
+            String colorName
     ) {
         this.ctx = ctx;
-        this.text = text;
+        this.textSupplier = textSupplier;
         this.progressSupplier = progressSupplier;
 
-        BossBar.Color color = parseColor(colorRaw);
+        BossBar.Color color = parseColor(colorName);
 
         this.bossBar = BossBar.bossBar(
                 Component.empty(),
@@ -37,8 +37,7 @@ public class BossbarShowcase implements Showcase {
 
     private static BossBar.Color parseColor(String s) {
         if (s == null) return BossBar.Color.BLUE;
-        String v = s.trim().toLowerCase(Locale.ROOT);
-        return switch (v) {
+        return switch (s.toLowerCase(Locale.ROOT)) {
             case "pink" -> BossBar.Color.PINK;
             case "red" -> BossBar.Color.RED;
             case "green" -> BossBar.Color.GREEN;
@@ -61,7 +60,7 @@ public class BossbarShowcase implements Showcase {
 
     @Override
     public void show() {
-        bossBar.name(ctx.render(text));
+        bossBar.name(ctx.render(String.valueOf(textSupplier.get())));
 
         float p = progressSupplier.get();
         if (p < 0f) p = 0f;
@@ -79,8 +78,14 @@ public class BossbarShowcase implements Showcase {
 
     public void showTo(Player p) {
         if (!ctx.allowed(p)) return;
-        bossBar.name(ctx.render(text));
-        bossBar.progress(progressSupplier.get());
+
+        bossBar.name(ctx.render(String.valueOf(textSupplier.get())));
+
+        float prog = progressSupplier.get();
+        if (prog < 0f) prog = 0f;
+        if (prog > 1f) prog = 1f;
+        bossBar.progress(prog);
+
         p.showBossBar(bossBar);
     }
 

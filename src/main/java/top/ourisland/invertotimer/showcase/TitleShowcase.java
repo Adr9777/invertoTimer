@@ -2,22 +2,20 @@ package top.ourisland.invertotimer.showcase;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import top.ourisland.invertotimer.runtime.I18n;
 import top.ourisland.invertotimer.runtime.RuntimeContext;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class TitleShowcase implements Showcase {
     private final RuntimeContext ctx;
-    private final String title;
-    private final String subtitle;
+    private final Supplier<Object> textSupplier;
 
-    public TitleShowcase(RuntimeContext ctx, String title, String subtitle) {
+    public TitleShowcase(RuntimeContext ctx, Supplier<Object> textSupplier) {
         this.ctx = Objects.requireNonNull(ctx);
-        this.title = title == null ? "" : title;
-        this.subtitle = subtitle == null ? "" : subtitle;
+        this.textSupplier = Objects.requireNonNull(textSupplier);
     }
 
     @Override
@@ -27,21 +25,72 @@ public class TitleShowcase implements Showcase {
 
     @Override
     public String description() {
-        return I18n.langStrNP("itimer.showcase.title.desc");
+        return "Show title";
     }
 
     @Override
     public void show() {
-        final Component t = ctx.render(title);
-        final Component s = ctx.render(subtitle);
+        Parsed p0 = parse(textSupplier.get());
+
+        Component t = ctx.render(p0.title());
+        Component s = ctx.render(p0.subtitle());
+
+        Title.Times times = Title.Times.times(
+                Duration.ofSeconds(p0.fadeIn()),
+                Duration.ofSeconds(p0.stay()),
+                Duration.ofSeconds(p0.fadeOut())
+        );
 
         for (var p : ctx.players()) {
             if (!ctx.allowed(p)) continue;
-            p.showTitle(Title.title(t, s, Title.Times.times(
-                    Duration.of(0, ChronoUnit.SECONDS),
-                    Duration.of(2, ChronoUnit.SECONDS),
-                    Duration.of(0, ChronoUnit.SECONDS)
-            )));
+            p.showTitle(Title.title(t, s, times));
         }
+    }
+
+    private static Parsed parse(Object raw) {
+        String title = "";
+        String subtitle = "";
+        long fadeIn = 0;
+        long stay = 2;
+        long fadeOut = 0;
+
+        if (raw instanceof List<?> list) {
+            if (!list.isEmpty()) title = String.valueOf(list.get(0));
+            if (list.size() > 1) subtitle = String.valueOf(list.get(1));
+            if (list.size() > 2) fadeIn = parseSeconds(list.get(2), 0);
+            if (list.size() > 3) stay = parseSeconds(list.get(3), 2);
+            if (list.size() > 4) fadeOut = parseSeconds(list.get(4), 0);
+        } else if (raw instanceof Object[] arr) {
+            if (arr.length > 0) title = String.valueOf(arr[0]);
+            if (arr.length > 1) subtitle = String.valueOf(arr[1]);
+            if (arr.length > 2) fadeIn = parseSeconds(arr[2], 0);
+            if (arr.length > 3) stay = parseSeconds(arr[3], 2);
+            if (arr.length > 4) fadeOut = parseSeconds(arr[4], 0);
+        } else if (raw != null) {
+            title = String.valueOf(raw);
+            subtitle = "";
+        }
+
+        if (title == null) title = "";
+        if (subtitle == null) subtitle = "";
+
+        if (fadeIn < 0) fadeIn = 0;
+        if (stay < 0) stay = 0;
+        if (fadeOut < 0) fadeOut = 0;
+
+        return new Parsed(title, subtitle, fadeIn, stay, fadeOut);
+    }
+
+    private static long parseSeconds(Object o, long def) {
+        if (o == null) return def;
+        if (o instanceof Number n) return n.longValue();
+        try {
+            return Long.parseLong(String.valueOf(o));
+        } catch (Exception ignored) {
+            return def;
+        }
+    }
+
+    private record Parsed(String title, String subtitle, long fadeIn, long stay, long fadeOut) {
     }
 }

@@ -3,35 +3,54 @@ package top.ourisland.invertotimer.config.model;
 import top.ourisland.invertotimer.runtime.timer.TimeUtil;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public record ShowcaseConfig(
         boolean enabled,
         Duration startAt,
         Duration interval,
-        String text,
-        String subtitle,
-        String color
+        Object text,
+        String color,
+        After after
 ) {
     public static ShowcaseConfig fromYaml(final Object obj) {
-        if (obj instanceof String s) return new ShowcaseConfig(true, null, null, s, "", "");
-        if (!(obj instanceof Map<?, ?> m)) return new ShowcaseConfig(false, null, null, "", "", "");
+        if (!(obj instanceof Map<?, ?> m)) return null;
 
-        Object enObj = m.get("enabled");
-        boolean enabled = enObj == null || Boolean.parseBoolean(String.valueOf(enObj));
+        boolean enabled = true;
+        Object enabledRaw = m.get("enabled");
+        if (enabledRaw instanceof Boolean b) enabled = b;
+        else if (enabledRaw != null) enabled = Boolean.parseBoolean(String.valueOf(enabledRaw));
 
         Duration startAt = TimeUtil.parseDurationLoose(m.get("start-at"));
         Duration interval = TimeUtil.parseDurationLoose(m.get("interval"));
 
-        Object textObj = m.get("text");
-        if (textObj == null) textObj = m.get("title");
-        String text = textObj == null ? "" : String.valueOf(textObj);
+        Object text = m.get("text");
 
-        Object subObj = m.get("subtitle");
-        String subtitle = subObj == null ? "" : String.valueOf(subObj);
+        if (text == null && (m.containsKey("title") || m.containsKey("subtitle"))) {
+            String t = m.get("title") == null ? "" : String.valueOf(m.get("title"));
+            String s = m.get("subtitle") == null ? "" : String.valueOf(m.get("subtitle"));
+            List<String> list = new ArrayList<>();
+            list.add(t);
+            list.add(s);
+            text = list;
+        }
 
         String color = m.get("color") == null ? null : String.valueOf(m.get("color"));
 
-        return new ShowcaseConfig(enabled, startAt, interval, text, subtitle, color);
+        After after = null;
+        Object afterObj = m.get("after");
+        if (afterObj instanceof Map<?, ?> am) {
+            Object at = am.get("text");
+            Duration dur = TimeUtil.parseDurationLoose(am.get("duration"));
+            if (dur == null) dur = Duration.ZERO;
+            if (at != null || !dur.isZero()) after = new After(at, dur);
+        }
+
+        return new ShowcaseConfig(enabled, startAt, interval, text, color, after);
+    }
+
+    public record After(Object text, Duration duration) {
     }
 }

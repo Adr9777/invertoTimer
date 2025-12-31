@@ -1,18 +1,19 @@
 package top.ourisland.invertotimer.showcase;
 
-import net.kyori.adventure.text.Component;
+import com.velocitypowered.api.proxy.Player;
 import top.ourisland.invertotimer.runtime.I18n;
 import top.ourisland.invertotimer.runtime.RuntimeContext;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ActionbarShowcase implements Showcase {
     private final RuntimeContext ctx;
-    private final String text;
+    private final Supplier<Object> textSupplier;
 
-    public ActionbarShowcase(RuntimeContext ctx, String text) {
+    public ActionbarShowcase(RuntimeContext ctx, Supplier<Object> textSupplier) {
         this.ctx = Objects.requireNonNull(ctx);
-        this.text = text == null ? "" : text;
+        this.textSupplier = Objects.requireNonNull(textSupplier);
     }
 
     @Override
@@ -27,9 +28,10 @@ public class ActionbarShowcase implements Showcase {
 
     @Override
     public void show() {
-        final Component msg = ctx.render(text);
-        for (var p : ctx.players()) {
-            if (ctx.allowed(p)) p.sendActionBar(msg);
+        final String raw = String.valueOf(textSupplier.get());
+        for (Player p : ctx.players()) {
+            if (!ctx.allowed(p)) continue;
+            p.sendActionBar(ctx.render(raw));
         }
     }
 }

@@ -12,18 +12,17 @@ public final class ShowcaseFactory {
     }
 
     public static Showcase create(
-            final String key,
-            final ShowcaseConfig sc,
-            final RuntimeContext ctx,
-            final Supplier<Float> bossbarProgress
+            String key,
+            ShowcaseConfig sc,
+            RuntimeContext ctx,
+            Supplier<Object> textSupplier,
+            Supplier<Float> progressSupplier
     ) {
-        if (key == null || sc == null || !sc.enabled()) return null;
-
         return switch (key.toLowerCase(Locale.ROOT)) {
-            case "actionbar" -> new ActionbarShowcase(ctx, sc.text());
-            case "text" -> new TextShowcase(ctx, sc.text());
-            case "title" -> new TitleShowcase(ctx, sc.text(), sc.subtitle());
-            case "bossbar" -> new BossbarShowcase(ctx, sc.text(), sc.color(), bossbarProgress);
+            case "bossbar" -> new BossbarShowcase(ctx, textSupplier, progressSupplier, sc.color());
+            case "title" -> new TitleShowcase(ctx, textSupplier);
+            case "actionbar" -> new ActionbarShowcase(ctx, textSupplier);
+            case "text" -> new TextShowcase(ctx, textSupplier);
             default -> null;
         };
     }

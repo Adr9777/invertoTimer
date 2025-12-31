@@ -68,6 +68,9 @@ timers:
         # Example with MiniMessage + placeholders:
         # text: "<yellow>New Year in</yellow> <white>{remaining}</white>"
         text: "New Year in {remaining}"
+        after:
+          text: "Happy New Year!"
+          duration: 10m
 
       # ------------------------------------------------------
       # bossbar showcase
@@ -85,6 +88,9 @@ timers:
         # You can also use i18n:
         # text: "<gradient:gold:yellow>{i18n:timer.newyear.bossbar}</gradient> <white>{remaining}</white>"
         text: "New Year in {remaining}"
+        after:
+          text: "Happy New Year!"
+          duration: 10m
 
       # ------------------------------------------------------
       # text showcase (chat message)
@@ -110,8 +116,20 @@ timers:
       title:
         start-at: 10m
         interval: 5s
-        title: "<gold>New Year</gold>"
-        subtitle: "<gray>{remaining}</gray>"
+        text:
+          - "<gold>New Year</gold>"
+          - "<gray>{remaining}</gray>"
+          - "0"
+          - "2"
+          - "0"
+      after:
+        text:
+          - "Happy New Year!"
+          - "Yay!"
+          - "0"
+          - "2"
+          - "0"
+        duration: 30s
 
     # ========================================================
     # ACTIONS (one-shot triggers at specified time offsets)
